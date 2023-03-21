@@ -6,7 +6,8 @@ export default({
             dbname: '',
             keyprefix: '',
             keyinfo: '',
-            selectedkeyprefix: ''
+            selectedkeyprefix: '',
+            result: ''
         }
     },
     created() {
@@ -16,15 +17,16 @@ export default({
         hasValidInput() {
             return this.dbname.trim() && this.selectedkeyprefix.trim() && this.keyinfo.trim()
         },
-        search() {
+        async search() {
             if(this.hasValidInput()) {
-                alert(this.selectedkeyprefix + "-" + this.keyinfo + "-" + this.dbname)
+                const url = '/api/data/getData?keyPrefix='+this.selectedkeyprefix +"&keyInfo=" + this.keyinfo
+                this.result = await (await fetch(url)).text()
             } else {
                 alert('invalid')
             }
         },
         async fetchKeyPrefix() {
-            const url = '/api/data/getkeyprefix'
+            const url = '/api/data/getkeyprefix?dbname='+this.dbname
             this.keyprefix = await (await fetch(url)).json()
             // this.keyprefix = ['Prefix-1', 'Prefix-2', 'Prefix-3']
         }
@@ -34,22 +36,32 @@ export default({
 
 
 <template>
-    <label><p> Name:</p>
-        <select v-model="dbname" >
-            <option disabled value=""> select db name </option>
-            <option>database 1</option>
-            <option>database 2</option>
-        </select>
-    </label>
+    <span>Name:</span>
     <br>
-    <label><p> Key prefix:</p>
-        <select v-model="selectedkeyprefix">
-            <option v-for="prefix in keyprefix" :key="prefix">{{ prefix }}</option>
-        </select>
-    </label>
+    <select v-model="dbname" @change="fetchKeyPrefix" >
+        <option disabled value=""> select db name </option>
+        <option>DB-1</option>
+        <option>DB-2</option>
+    </select>
     <br>
-    <label>Key Info: <input v-model="keyinfo"><button @click="search">Search</button></label>
-
+    <br>
+    <span>Key prefix: </span>
+    <br>
+    <select v-model="selectedkeyprefix">
+        <option v-for="prefix in keyprefix" :key="prefix">{{ prefix }}</option>
+    </select>
+    <br>
+    <br>
+    <span>Key Info: </span>
+    <br>
+    <input v-model="keyinfo">
+    <br>
+    <button @click="search">Search</button>
+    <br>
+    <br>
+    <span>Result:</span>
+    <br>
+    <textarea v-model="result" placeholder="no result found"></textarea>
 </template>
 
 

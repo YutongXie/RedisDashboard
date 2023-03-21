@@ -1,6 +1,7 @@
 package com.zheqiushui.redis.dashboard.service;
 
-import org.springframework.stereotype.Controller;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -13,13 +14,23 @@ import java.util.List;
 @RestController()
 @RequestMapping("/data")
 public class DataQueryService {
-
+    @Autowired
+    private KeyPrefixService keyPrefixService;
     @GetMapping(path = "/getkeyprefix")
     public List<String> getKeyPrefix(String dbname) {
-        List<String> prefixList = new ArrayList<>();
-        for (int i = 0; i < 5; i++) {
-            prefixList.add("prefix-" + i);
+        if(StringUtils.isBlank(dbname)) {
+            return new ArrayList<>();
+        } else {
+            return keyPrefixService.getKeyPrefix(dbname);
         }
-        return prefixList;
+    }
+
+    @GetMapping(path = "/getData")
+    public String getData(String keyPrefix, String keyInfo) {
+        if(StringUtils.isBlank(keyPrefix)  || StringUtils.isBlank(keyInfo)) {
+            return "invalid input";
+        } else {
+            return keyPrefix + ":" + keyInfo;
+        }
     }
 }
