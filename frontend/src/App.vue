@@ -36,32 +36,35 @@ export default({
 
 
 <template>
-    <span>Name:</span>
-    <br>
-    <select v-model="dbname" @change="fetchKeyPrefix" >
-        <option disabled value=""> select db name </option>
-        <option>DB-1</option>
-        <option>DB-2</option>
-    </select>
-    <br>
-    <br>
-    <span>Key prefix: </span>
-    <br>
-    <select v-model="selectedkeyprefix">
-        <option v-for="prefix in keyprefix" :key="prefix">{{ prefix }}</option>
-    </select>
-    <br>
-    <br>
-    <span>Key Info: </span>
-    <br>
-    <input v-model="keyinfo">
-    <br>
-    <button @click="search">Search</button>
-    <br>
-    <br>
-    <span>Result:</span>
-    <br>
-    <textarea v-model="result" placeholder="no result found"></textarea>
+    <div class="left">
+        <span>Name:</span>
+        <br>
+        <select v-model="dbname" @change="fetchKeyPrefix" >
+            <option disabled value=""> select db name </option>
+            <option>DB-1</option>
+            <option>DB-2</option>
+        </select>
+        <br>
+        <br>
+        <span>Key prefix: </span>
+        <br>
+        <select size=5 v-model="selectedkeyprefix">
+            <option v-for="prefix in keyprefix" :key="prefix">{{ prefix }}</option>
+        </select>
+        <br>
+        <br>
+        <span >Key Info:</span>
+        <input v-model="keyinfo" >
+        <br>
+        <button @click="search">Search</button>
+        <br>
+        <br>
+    </div>
+    <div class="right">
+        <span>Result:</span>
+        <br>
+        <textarea rows=15 cols=28 v-model="result" placeholder="no result found"></textarea>
+    </div>
 </template>
 
 
